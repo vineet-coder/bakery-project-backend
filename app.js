@@ -11,7 +11,8 @@ app.get("/", (req, res) => {
 
 mongoose
   .connect(
-    "mongodb+srv://vineet:cookiesbakery@cluster0.ymbhv.mongodb.net/shopstack?retryWrites=true&w=majority",
+    // "mongodb+srv://vineet:cookiesbakery@cluster0.ymbhv.mongodb.net/shopstack?retryWrites=true&w=majority",
+    "mongodb://localhost:27017/shopstack?readPreference=primary",
     {
       useUnifiedTopology: true,
       useNewUrlParser: true,
@@ -117,41 +118,41 @@ app.post("/CAKE", async (req, res) => {
   }
 });
 
-app.get("/CUPCAKE", async (req, res) => {
+app.get("/api/cupcakes", async (req, res) => {
   try {
     const result = await Product.find({ category: "cupcake" });
     res.send(result);
-    console.log(result);
+    // console.log(result);
   } catch (err) {
     res.send(err);
   }
 });
 
-app.get("/CAKE", async (req, res) => {
+app.get("/api/cakes", async (req, res) => {
   try {
     const result = await Product.find({ category: "cake" });
     res.send(result);
-    console.log(result);
+    // console.log(result);
   } catch (err) {
     res.send(err);
   }
 });
-app.get("/BROWNIE", async (req, res) => {
+app.get("/api/brownies", async (req, res) => {
   try {
     console.log("here");
     const result = await Product.find({ category: "brownie" });
-    console.log(result);
+    // console.log(result);
 
     res.send(result);
   } catch (err) {
     res.send(err);
   }
 });
-app.get("/COOKIE", async (req, res) => {
+app.get("/api/cookies", async (req, res) => {
   try {
     const result = await Product.find({ category: "cookie" });
     res.send(result);
-    console.log(result);
+    // console.log(result);
   } catch (err) {
     res.send(err);
   }
