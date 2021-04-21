@@ -1,32 +1,9 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const cartSchema = new mongoose.Schema({
-  category: String,
-
+  id: { type: Schema.Types.ObjectId, ref: "Product" },
   quantity: Number,
-  wishlist: Boolean,
-  cart: Boolean,
-
-  isReady: Boolean,
-
-  ready: String,
-
-  isDiscount: Boolean,
-
-  discount: Number,
-
-  isPopulor: Boolean,
-
-  name: String,
-
-  image: [String],
-
-  price: Number,
-
-  Description: {
-    Details: [String],
-    Instructions: [String],
-  },
 });
 
 const Cart = new mongoose.model("Cart", cartSchema);

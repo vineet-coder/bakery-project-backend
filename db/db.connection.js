@@ -18,9 +18,10 @@ async function initializeDbConnection() {
 
   try {
     const response = await mongoose.connect(
-      // "mongodb+srv://vineet:cookiesbakery@cluster0.ymbhv.mongodb.net/shopstack?retryWrites=true&w=majority",
-      "mongodb://localhost:27017/shopstack?readPreference=primary",
+      "mongodb+srv://vineet:cookiesbakery@cluster0.ymbhv.mongodb.net/shopstack?retryWrites=true&w=majority",
+      // "mongodb://localhost:27017/shopstack?readPreference=primary",
       {
+        useFindAndModify: false,
         useUnifiedTopology: true,
         useNewUrlParser: true,
       }

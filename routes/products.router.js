@@ -95,18 +95,18 @@ router
       // const { productId } = req.body;
       // const product = await Product.findById(productId);
       // console.log({ product });
-      const { item } = req;
+      // const { item } = req;
       // const { _id, __v, ...tempitem } = item;
       // console.log({ tempitem });
       // item._id = undefined;
-      item.__v = undefined;
+      // item.__v = undefined;
 
       // const newItem = JSON.stringify(item);
       // console.log(newItem);
 
-      const newCart = new Cart(item);
+      // const newCart = new Cart(item);
 
-      console.log({ item });
+      // console.log({ item });
 
       // const newCart = new Cart({
       //   category: "rammm",
