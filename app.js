@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const Port = 8000;
+const Port = process.env.PORT || 8000;
 const mongoose = require("mongoose");
 const { Product } = require("./models/product.model.js");
 app.use(express.json());
