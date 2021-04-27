@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 initializeDbConnection();
 app.use("/cartproducts", cartproducts);
 app.use("/wishlistproducts", wishlistproducts);
-app.use("/api", products);
+app.use("/product", products);
 
 // app.use((err, req, res, next) => {
 //   if (res.headersSent) {
