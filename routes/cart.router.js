@@ -47,4 +47,23 @@ router
     }
   });
 
+router.route("/products").post(async (req, res) => {
+  const { id, qnt } = req.body;
+  // console.log(id);
+
+  await Product.findByIdAndUpdate(id, { cart: true });
+
+  const newCart = new Cart({ id: id, quantity: qnt });
+
+  await newCart.save();
+
+  const product = await Product.findById(id);
+  console.log(product);
+
+  res.send(product);
+
+  // const { item } = req;
+  // console.log(item);
+});
+
 module.exports = router;

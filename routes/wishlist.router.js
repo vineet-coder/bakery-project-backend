@@ -45,4 +45,23 @@ router
     }
   });
 
+router.route("/products").post(async (req, res) => {
+  // const { productId } = req.perams;
+  const { id } = req.body;
+
+  await Product.findByIdAndUpdate(id, { wishlist: true });
+
+  const newWishlistProduct = new WishlistProduct({ id: id });
+
+  await newWishlistProduct.save();
+
+  const product = await Product.findById(id);
+  console.log(product);
+
+  res.send(product);
+
+  // const { item } = req;
+  // console.log(item);
+});
+
 module.exports = router;
