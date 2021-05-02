@@ -66,97 +66,102 @@ router
     }
   });
 
+router
+  .param("productId", async (req, res, next, productId) => {
+    console.log("here", productId);
 
+    try {
+      const product = await Product.findById(productId);
+      // console.log(product);
 
-// router.param("productId", async (req, res, next, productId) => {
-//   console.log("here", productId);
+      if (!product) {
+        return res
+          .status(400)
+          .json({ success: false, message: "product not found" });
+      }
 
-//   try {
-//     const product = await Product.findById(productId);
-//     if (!product) {
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "product not found" });
-//     }
+      req.item = product;
+      next();
+    } catch {
+      res
+        .status(400)
+        .json({ success: false, message: "could not retrieve product " });
+    }
+  })
 
-//     req.item = product;
-//     next();
-//   } catch {
-//     res
-//       .status(400)
-//       .json({ success: false, message: "could not retrieve product " });
-//   }
-// });
+  .route("/:productId")
 
-// .route("/itemincarts")
+  .get(async (req, res) => {
+    try {
+      const { item } = req;
 
-// .post(async (req, res) => {
-//   try {
-// const { productId } = req.body;
-// const product = await Product.findById(productId);
-// console.log({ product });
-// const { item } = req;
-// const { _id, __v, ...tempitem } = item;
-// console.log({ tempitem });
-// item._id = undefined;
-// item.__v = undefined;
+      // const { productId } = req.body;
+      // const product = await Product.findById(productId);
+      console.log({ item });
 
-// const newItem = JSON.stringify(item);
-// console.log(newItem);
+      res.json(item);
 
-// const newCart = new Cart(item);
+      // const { _id, __v, ...tempitem } = item;
+      // console.log({ tempitem });
+      // item._id = undefined;
+      // item.__v = undefined;
 
-// console.log({ item });
+      // const newItem = JSON.stringify(item);
+      // console.log(newItem);
 
-// const newCart = new Cart({
-//   category: "rammm",
-//   _id: "607f2ea1f4d6ad45e8ca4f90",
+      // const newCart = new Cart(item);
 
-//   quantity: 1,
+      // console.log({ item });
 
-//   wishlist: false,
+      // const newCart = new Cart({
+      //   category: "rammm",
+      //   _id: "607f2ea1f4d6ad45e8ca4f90",
 
-//   isReady: true,
+      //   quantity: 1,
 
-//   ready: "READY TO EAT",
+      //   wishlist: false,
 
-//   isDiscount: false,
+      //   isReady: true,
 
-//   discount: 0,
+      //   ready: "READY TO EAT",
 
-//   isPopulor: false,
+      //   isDiscount: false,
 
-//   cart: false,
+      //   discount: 0,
 
-//   name: "Oreo And Chocolate CupCake",
-//   image: [
-//     "./cupcake/Oreo-And-Chocolate-CupCake1.jpg",
-//     "./cupcake/Oreo-And-Chocolate-CupCake2.jpg",
-//   ],
-//   price: 499,
-//   Description: {
-//     Details: [
-//       " 6 Pcs of Cupcakes",
-//       "Cupcake Flavour- Oreo And Chocolate",
-//       "Red Velvet Base with Cheese Cream Frosting",
-//       "Decorated with Fruits",
-//     ],
-//     Instructions: [
-//       "Upon receiving the cupcake, immediately refrigerate it",
-//       "Leave it in the fridge until it is time to consume.",
-//       "The cup cake should be placed back in the fridge and should be consumed within 24 hours",
-//       "Enjoy your cupcake!",
-//     ],
-//   },
-// });
+      //   isPopulor: false,
 
-//     const result = await newCart.save();
-//     console.log({ result });
-//     res.status(201).send(result);
-//   } catch (err) {
-//     res.status(404).send(err);
-//   }
-// })
+      //   cart: false,
+
+      //   name: "Oreo And Chocolate CupCake",
+      //   image: [
+      //     "./cupcake/Oreo-And-Chocolate-CupCake1.jpg",
+      //     "./cupcake/Oreo-And-Chocolate-CupCake2.jpg",
+      //   ],
+      //   price: 499,
+      //   Description: {
+      //     Details: [
+      //       " 6 Pcs of Cupcakes",
+      //       "Cupcake Flavour- Oreo And Chocolate",
+      //       "Red Velvet Base with Cheese Cream Frosting",
+      //       "Decorated with Fruits",
+      //     ],
+      //     Instructions: [
+      //       "Upon receiving the cupcake, immediately refrigerate it",
+      //       "Leave it in the fridge until it is time to consume.",
+      //       "The cup cake should be placed back in the fridge and should be consumed within 24 hours",
+      //       "Enjoy your cupcake!",
+      //     ],
+      //   },
+      // });
+
+      // const result = await newCart.save();
+      // console.log({ result });
+      // res.status(201).send(result);
+    } catch (err) {
+      res.status(404).send(err);
+    }
+  });
 
 router
   .route("/cupcakes")
