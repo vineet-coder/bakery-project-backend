@@ -35,13 +35,13 @@ router
   .delete(async (req, res) => {
     try {
       const { cartProductId, productId } = req.body;
-      //   console.log({ id });
+     
 
       await Product.findByIdAndUpdate(productId, { cart: false });
       await Cart.findByIdAndDelete(cartProductId);
 
       res.send({ succcess: "delete success" });
-      // console.log("delete success");
+      
     } catch (error) {
       console.log(error);
     }
