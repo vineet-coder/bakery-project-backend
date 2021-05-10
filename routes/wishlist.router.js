@@ -34,7 +34,6 @@ router
   .delete(async (req, res) => {
     try {
       const { wishlistProductId, productId } = req.body;
-      //   console.log({ id });
 
       await Product.findByIdAndUpdate(productId, { wishlist: false });
       await WishlistProduct.findByIdAndDelete(wishlistProductId);
@@ -46,7 +45,6 @@ router
   });
 
 router.route("/products").post(async (req, res) => {
-  // const { productId } = req.perams;
   const { id } = req.body;
 
   await Product.findByIdAndUpdate(id, { wishlist: true });
@@ -56,12 +54,9 @@ router.route("/products").post(async (req, res) => {
   await newWishlistProduct.save();
 
   const product = await Product.findById(id);
-  console.log(product);
 
   res.send(product);
 
-  // const { item } = req;
-  // console.log(item);
 });
 
 module.exports = router;

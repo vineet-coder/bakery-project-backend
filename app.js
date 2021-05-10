@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -19,13 +21,6 @@ initializeDbConnection();
 app.use("/cartproducts", cartproducts);
 app.use("/wishlistproducts", wishlistproducts);
 app.use("/product", products);
-
-// app.use((err, req, res, next) => {
-//   if (res.headersSent) {
-//     return next(err);
-//   }
-//   res.status(500).json({ error: err.message });
-// });
 
 app.listen(Port, () => {
   console.log(`Example app listening at ${Port}`);

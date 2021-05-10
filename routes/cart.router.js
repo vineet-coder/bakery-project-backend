@@ -10,7 +10,6 @@ router
     try {
       const result = await Cart.find().populate("id");
       res.send(result);
-      //   res.send({ message: "api ban raha heeee", cart: Cart });
     } catch (error) {
       console.log(error);
     }
@@ -35,13 +34,13 @@ router
   .delete(async (req, res) => {
     try {
       const { cartProductId, productId } = req.body;
-     
+
 
       await Product.findByIdAndUpdate(productId, { cart: false });
       await Cart.findByIdAndDelete(cartProductId);
 
       res.send({ succcess: "delete success" });
-      
+
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +48,6 @@ router
 
 router.route("/products").post(async (req, res) => {
   const { id, qnt } = req.body;
-  // console.log(id);
 
   await Product.findByIdAndUpdate(id, { cart: true });
 
@@ -62,8 +60,6 @@ router.route("/products").post(async (req, res) => {
 
   res.send(product);
 
-  // const { item } = req;
-  // console.log(item);
 });
 
 module.exports = router;
