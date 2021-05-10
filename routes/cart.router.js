@@ -35,10 +35,12 @@ router
     try {
       const { cartProductId, productId } = req.body;
 
+
       await Product.findByIdAndUpdate(productId, { cart: false });
       await Cart.findByIdAndDelete(cartProductId);
 
       res.send({ succcess: "delete success" });
+
     } catch (error) {
       console.log(error);
     }
