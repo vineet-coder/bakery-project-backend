@@ -52,10 +52,14 @@ router
 
       DeleteProduct(userId, productId, Cart, res);
 
-      // await Product.findByIdAndUpdate(productId, { cart: false });
-      // await Cart.findByIdAndDelete(cartProductId);
 
-      // res.send({ succcess: "delete success" });
+
+
+      await Product.findByIdAndUpdate(productId, { cart: false });
+      await Cart.findByIdAndDelete(cartProductId);
+
+      res.send({ succcess: "delete success" });
+
     } catch (error) {
       res.status(404).json(error, "Something is wrong");
     }
