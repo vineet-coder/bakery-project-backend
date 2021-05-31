@@ -9,6 +9,7 @@ async function initializeDbConnection() {
         useFindAndModify: false,
         useUnifiedTopology: true,
         useNewUrlParser: true,
+        useCreateIndex: true,
       }
     );
 

@@ -2,45 +2,62 @@ const express = require("express");
 const router = express.Router();
 const { Product } = require("../models/product.model.js");
 const { Cart } = require("../models/cart.model.js");
+const {
+  GetData,
+  PostProduct,
+  DeleteProduct,
+} = require("../controllers/productController.js");
+const { Collection } = require("mongoose");
 
 router
   .route("/")
 
   .get(async (req, res) => {
+    const { userId } = req.user;
     try {
-      const result = await Cart.find().populate("id");
-      res.send(result);
+      GetData(Cart, userId, res);
+
+      // const result = await Cart.find({ userId }).populate("id");
+      // res.send(result);
     } catch (error) {
-      console.log(error);
+      res.status(404).json(error, "Something is wrong");
     }
   })
 
   .post(async (req, res) => {
+    const { userId } = req.user;
+
     try {
-      const { id, qnt } = req.body;
+      const { productId } = req.body;
 
-      await Product.findByIdAndUpdate(id, { cart: true });
+      PostProduct(userId, productId, Cart, res);
 
-      const newCart = new Cart({ id: id, quantity: qnt });
+      // await Product.findByIdAndUpdate(id, { cart: true });
 
-      await newCart.save();
+      // const newCart = new Cart({ id: id, quantity: qnt });
 
-      res.send({ succcess: "ture" });
+      // await newCart.save();
+
+      // res.send({ succcess: "ture" });
     } catch (error) {
-      console.log(error);
+      res.status(404).json(error, "Something is wrong");
     }
   })
 
   .delete(async (req, res) => {
+    const { userId } = req.user;
+
     try {
-      const { cartProductId, productId } = req.body;
+      const { productId } = req.body;
 
-      await Product.findByIdAndUpdate(productId, { cart: false });
-      await Cart.findByIdAndDelete(cartProductId);
+      DeleteProduct(userId, productId, Cart, res);
 
-      res.send({ succcess: "delete success" });
+      // await Product.findByIdAndUpdate(productId, { cart: false });
+      // await Cart.findByIdAndDelete(cartProductId);
+
+      // res.send({ succcess: "delete success" });
     } catch (error) {
-      console.log(error);
+      res.status(404).json(error, "Something is wrong");
     }
   });
 
@@ -54,10 +71,9 @@ router.route("/products").post(async (req, res) => {
   await newCart.save();
 
   const product = await Product.findById(id);
-  console.log(product);
+  res.status(404).json(product);
 
   res.send(product);
-
 });
 
 module.exports = router;

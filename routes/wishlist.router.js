@@ -7,40 +7,53 @@ router
   .route("/")
 
   .get(async (req, res) => {
+    const { userId } = req.user;
+
     try {
-      const result = await WishlistProduct.find().populate("id");
-      res.send(result);
+      GetData(Wishlist, userId, res);
     } catch (error) {
-      console.log(error);
+      res.status(404).json(error, "Something is wrong");
     }
   })
 
   .post(async (req, res) => {
+    const { userId } = req.user;
+
     try {
-      const { id } = req.body;
+      const { productId } = req.body;
 
-      await Product.findByIdAndUpdate(id, { wishlist: true });
+      PostProduct(userId, productId, Wishlist, res);
 
-      const newWishlistProduct = new WishlistProduct({ id: id });
+      // const { id } = req.body;
 
-      await newWishlistProduct.save();
+      // await Product.findByIdAndUpdate(id, { wishlist: true });
 
-      res.send({ succcess: "save to wishlsit" });
+      // const newWishlistProduct = new WishlistProduct({ id: id });
+
+      // await newWishlistProduct.save();
+
+      // res.send({ succcess: "save to wishlsit" });
     } catch (error) {
-      console.log(error);
+      res.status(404).json(error, "Something is wrong");
     }
   })
 
   .delete(async (req, res) => {
+    const { userId } = req.user;
+
     try {
-      const { wishlistProductId, productId } = req.body;
+      const { productId } = req.body;
 
-      await Product.findByIdAndUpdate(productId, { wishlist: false });
-      await WishlistProduct.findByIdAndDelete(wishlistProductId);
+      DeleteProduct(userId, productId, Wishlist, res);
 
-      res.send({ succcess: "delete success" });
+      // const { wishlistProductId, productId } = req.body;
+
+      // await Product.findByIdAndUpdate(productId, { wishlist: false });
+      // await WishlistProduct.findByIdAndDelete(wishlistProductId);
+
+      // res.send({ succcess: "delete success" });
     } catch (error) {
-      console.log(error);
+      res.status(404).json(error, "Something is wrong");
     }
   });
 
@@ -56,7 +69,6 @@ router.route("/products").post(async (req, res) => {
   const product = await Product.findById(id);
 
   res.send(product);
-
 });
 
 module.exports = router;
