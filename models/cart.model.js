@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const cartSchema = new mongoose.Schema({
-  id: { type: Schema.Types.ObjectId, ref: "Product" },
-  quantity: Number,
+  userId: { type: Schema.Types.ObjectId, ref: "User-sign-up" },
+
+  cartPoducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 });
 
 const Cart = new mongoose.model("Cart", cartSchema);
