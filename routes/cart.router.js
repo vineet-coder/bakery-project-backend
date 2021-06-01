@@ -46,9 +46,12 @@ router
 
   .delete(async (req, res) => {
     const { userId } = req.user;
+    console.log(userId);
 
     try {
       const { productId } = req.body;
+
+      console.log(productId);
 
       DeleteProduct(userId, productId, Cart, res);
 

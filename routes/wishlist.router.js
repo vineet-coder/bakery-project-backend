@@ -1,7 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { WishlistProduct } = require("../models/wishlist.model.js");
+const { Wishlist } = require("../models/wishlist.model.js");
 const { Product } = require("../models/product.model.js");
+const {
+  PostProduct,
+  GetData,
+  DeleteProduct,
+} = require("../controllers/productController.js");
 
 router
   .route("/")
@@ -28,7 +33,7 @@ router
 
       // await Product.findByIdAndUpdate(id, { wishlist: true });
 
-      // const newWishlistProduct = new WishlistProduct({ id: id });
+      // const newWishlistProduct = new Wishlist({ id: id });
 
       // await newWishlistProduct.save();
 
@@ -49,7 +54,7 @@ router
       // const { wishlistProductId, productId } = req.body;
 
       // await Product.findByIdAndUpdate(productId, { wishlist: false });
-      // await WishlistProduct.findByIdAndDelete(wishlistProductId);
+      // await Wishlist.findByIdAndDelete(wishlistProductId);
 
       // res.send({ succcess: "delete success" });
     } catch (error) {
@@ -62,7 +67,7 @@ router.route("/products").post(async (req, res) => {
 
   await Product.findByIdAndUpdate(id, { wishlist: true });
 
-  const newWishlistProduct = new WishlistProduct({ id: id });
+  const newWishlistProduct = new Wishlist({ id: id });
 
   await newWishlistProduct.save();
 
