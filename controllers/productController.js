@@ -1,6 +1,9 @@
 const GetData = async (collection, userId, res) => {
   try {
-    const result = await collection.find({ userId }).populate("products");
+    const result = await collection.find({ userId }).populate({
+      path: "products.productid",
+      model: "Product",
+    });
 
     res.status(200).json({ success: true, message: "your data", result });
   } catch (error) {
@@ -8,7 +11,7 @@ const GetData = async (collection, userId, res) => {
   }
 };
 
-const PostProduct = async (userId, productId, collection, res) => {
+const PostProduct = async (userId, productId, quantity, collection, res) => {
   try {
     console.log("aa gaya hu me");
     const user = await collection.find({ userId });
@@ -20,12 +23,15 @@ const PostProduct = async (userId, productId, collection, res) => {
 
       const newUser = new collection({
         userId: userId,
-        products: [productId],
+        products: [{ productid: productId, quantity: quantity }],
       });
 
       await newUser.save();
 
-      const result = await collection.find({ userId }).populate("products");
+      const result = await collection.find({ userId }).populate({
+        path: "products.productid",
+        model: "Product",
+      });
 
       console.log({ result });
       console.log("post bhi chalta hai!!");
@@ -35,20 +41,27 @@ const PostProduct = async (userId, productId, collection, res) => {
         .json({ success: true, message: `data post`, result });
     } else {
       console.log("user to hai");
-      const productStatus = user[0].products.includes(productId);
+      const productStatus = user[0].products
+        .map((item) => item.productid)
+        .includes(productId);
+      console.log(user[0].products.map((item) => item.productid));
+
       console.log({ productStatus });
 
       if (!productStatus) {
         console.log("new product");
 
         await collection.findByIdAndUpdate(user[0]._id, {
-          $push: { products: productId },
+          $push: { products: { productid: productId, quantity: quantity } },
         });
       }
     }
     console.log("sab kr dia");
 
-    const result = await collection.find({ userId }).populate("products");
+    const result = await collection.find({ userId }).populate({
+      path: "products.productid",
+      model: "Product",
+    });
     console.log(result);
 
     res
@@ -64,12 +77,21 @@ const DeleteProduct = async (userId, productId, collection, res) => {
     console.log("aa gaya hu me");
     const user = await collection.find({ userId });
 
-    await collection.findByIdAndUpdate(user[0]._id, {
-      $pull: { products: productId },
-    });
+    // await collection.findByIdAndUpdate(user[0]._id, {
+    //   $pull: { products: { productId: productId, quantity: quantity } },
+    // });
+
+    await collection.updateOne(
+      { _id: user[0]._id },
+      { $pull: { products: { productid: productId } } },
+      { safe: true, multi: true }
+    );
     console.log("kam tamam kr dia aka");
 
-    const result = await collection.find({ userId }).populate("products");
+    const result = await collection.find({ userId }).populate({
+      path: "products.productid",
+      model: "Product",
+    });
     console.log(result);
 
     res.status(200).json({ success: true, message: "your data", result });

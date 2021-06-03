@@ -25,9 +25,9 @@ router
     const { userId } = req.user;
 
     try {
-      const { productId } = req.body;
+      const { productId, quantity } = req.body;
 
-      PostProduct(userId, productId, Wishlist, res);
+      PostProduct(userId, productId, quantity, Wishlist, res);
 
       // const { id } = req.body;
 

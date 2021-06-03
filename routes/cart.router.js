@@ -28,9 +28,9 @@ router
     const { userId } = req.user;
 
     try {
-      const { productId } = req.body;
-
-      PostProduct(userId, productId, Cart, res);
+      const { productId, quantity } = req.body;
+      console.log(quantity);
+      PostProduct(userId, productId, quantity, Cart, res);
 
       // await Product.findByIdAndUpdate(id, { cart: true });
 
@@ -65,18 +65,32 @@ router
   });
 
 router.route("/products").post(async (req, res) => {
-  const { id, qnt } = req.body;
+  const { userId } = req.user;
 
-  await Product.findByIdAndUpdate(id, { cart: true });
+  try {
+    const { product_Id, updatedQuantity } = req.body;
+    console.log("yaha Aa gaya hoon");
+    console.log({ product_Id, updatedQuantity });
 
-  const newCart = new Cart({ id: id, quantity: qnt });
+    await Cart.updateOne(
+      { "products._id": product_Id },
+      { $set: { "products.$.quantity": updatedQuantity } },
+      (err) => {
+        if (err) {
+          res.status(500).json({ error: "Unable to update competitor." });
+        }
+      }
+    );
+    const result = await Cart.find({ userId }).populate({
+      path: "products.productid",
+      model: "Product",
+    });
+    res.status(200).json({ success: true, message: "your data", result });
 
-  await newCart.save();
-
-  const product = await Product.findById(id);
-  res.status(404).json(product);
-
-  res.send(product);
+    console.log("chal bhi raha huun");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

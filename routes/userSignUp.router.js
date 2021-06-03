@@ -9,6 +9,7 @@ router
   .post(async (req, res) => {
     try {
       const { userName, email, password, confirmPassword } = req.body;
+      console.log({ userName, email, password, confirmPassword });
 
       if (password !== confirmPassword) {
         res.status(400).json({ message: "Both password are not same!!" });
