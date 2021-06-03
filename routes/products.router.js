@@ -47,7 +47,7 @@ router.route("/cookies").get(async (req, res) => {
 });
 router
   .param("productId", async (req, res, next, productId) => {
-    console.log("here", productId);
+    console.log("here");
 
     try {
       const product = await Product.findById(productId);
@@ -73,9 +73,9 @@ router
     try {
       const { item } = req;
 
-      res.json(item);
+      res.status(200).json({ success: true, item });
     } catch (err) {
-      res.status(404).send(err);
+      res.status(404).send({ success: false });
     }
   });
 
