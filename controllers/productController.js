@@ -1,6 +1,9 @@
 const GetData = async (collection, userId, res) => {
   try {
-    const result = await collection.find({ userId }).populate("Product");
+    const result = await collection.find({ userId }).populate({
+      path: "products.productid",
+      model: "Product",
+    });
 
     res.status(200).json({ success: true, message: "your data", result });
   } catch (error) {
@@ -8,34 +11,43 @@ const GetData = async (collection, userId, res) => {
   }
 };
 
-const PostProduct = async (userId, productId, collection, res) => {
+const PostProduct = async (userId, productId, quantity, collection, res) => {
   try {
     const user = await collection.find({ userId });
+
     if (user.length === 0) {
       const newUser = new collection({
         userId: userId,
-        cartPoducts: [productId],
+        products: [{ productid: productId, quantity: quantity }],
       });
 
       await newUser.save();
 
-      const result = await collection.find({ userId }).populate("Product");
-      console.log("post bhi chalta hai!!");
+      const result = await collection.find({ userId }).populate({
+        path: "products.productid",
+        model: "Product",
+      });
 
       return res
         .status(200)
         .json({ success: true, message: `data post`, result });
     } else {
-      const productStatus = user[0].products.includes(productId);
+      const productStatus = user[0].products
+        .map((item) => item.productid)
+        .includes(productId);
 
       if (!productStatus) {
         await collection.findByIdAndUpdate(user[0]._id, {
-          $push: { cartPoducts: productId },
+          $push: { products: { productid: productId, quantity: quantity } },
         });
       }
     }
 
-    const result = await collection.find({ userId }).populate("Product");
+    const result = await collection.find({ userId }).populate({
+      path: "products.productid",
+      model: "Product",
+    });
+   
 
     res
       .status(200)
@@ -47,11 +59,18 @@ const PostProduct = async (userId, productId, collection, res) => {
 
 const DeleteProduct = async (userId, productId, collection, res) => {
   try {
-    await collection.findByIdAndUpdate(userId, {
-      $pull: { cartPoducts: productId },
-    });
+    const user = await collection.find({ userId });
 
-    const result = await collection.find({ userId }).populate("Product");
+    await collection.updateOne(
+      { _id: user[0]._id },
+      { $pull: { products: { productid: productId } } },
+      { safe: true, multi: true }
+    );
+
+    const result = await collection.find({ userId }).populate({
+      path: "products.productid",
+      model: "Product",
+    });
 
     res.status(200).json({ success: true, message: "your data", result });
   } catch (error) {

@@ -16,9 +16,6 @@ router
     const { userId } = req.user;
     try {
       GetData(Cart, userId, res);
-
-      // const result = await Cart.find({ userId }).populate("id");
-      // res.send(result);
     } catch (error) {
       res.status(404).json(error, "Something is wrong");
     }
@@ -28,17 +25,8 @@ router
     const { userId } = req.user;
 
     try {
-      const { productId } = req.body;
-
-      PostProduct(userId, productId, Cart, res);
-
-      // await Product.findByIdAndUpdate(id, { cart: true });
-
-      // const newCart = new Cart({ id: id, quantity: qnt });
-
-      // await newCart.save();
-
-      // res.send({ succcess: "ture" });
+      const { productId, quantity } = req.body;
+      PostProduct(userId, productId, quantity, Cart, res);
     } catch (error) {
       res.status(404).json(error, "Something is wrong");
     }
@@ -52,32 +40,34 @@ router
 
       DeleteProduct(userId, productId, Cart, res);
 
-
-
-
-      await Product.findByIdAndUpdate(productId, { cart: false });
-      await Cart.findByIdAndDelete(cartProductId);
-
-      res.send({ succcess: "delete success" });
-
     } catch (error) {
       res.status(404).json(error, "Something is wrong");
     }
   });
 
 router.route("/products").post(async (req, res) => {
-  const { id, qnt } = req.body;
+  const { userId } = req.user;
 
-  await Product.findByIdAndUpdate(id, { cart: true });
+  try {
+    const { product_Id, updatedQuantity } = req.body;
 
-  const newCart = new Cart({ id: id, quantity: qnt });
-
-  await newCart.save();
-
-  const product = await Product.findById(id);
-  res.status(404).json(product);
-
-  res.send(product);
+    await Cart.updateOne(
+      { "products._id": product_Id },
+      { $set: { "products.$.quantity": updatedQuantity } },
+      (err) => {
+        if (err) {
+          res.status(500).json({ error: "Unable to update competitor." });
+        }
+      }
+    );
+    const result = await Cart.find({ userId }).populate({
+      path: "products.productid",
+      model: "Product",
+    });
+    res.status(200).json({ success: true, message: "your data", result });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

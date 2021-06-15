@@ -28,7 +28,6 @@ router
 
 router.route("/brownies").get(async (req, res) => {
   try {
-    console.log("here");
     const result = await Product.find({ category: "brownie" });
 
     res.send(result);
@@ -47,7 +46,6 @@ router.route("/cookies").get(async (req, res) => {
 });
 router
   .param("productId", async (req, res, next, productId) => {
-    console.log("here", productId);
 
     try {
       const product = await Product.findById(productId);
@@ -73,9 +71,9 @@ router
     try {
       const { item } = req;
 
-      res.json(item);
+      res.status(200).json({ success: true, item });
     } catch (err) {
-      res.status(404).send(err);
+      res.status(404).send({ success: false });
     }
   });
 
