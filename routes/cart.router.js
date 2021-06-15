@@ -39,6 +39,7 @@ router
       const { productId } = req.body;
 
       DeleteProduct(userId, productId, Cart, res);
+
     } catch (error) {
       res.status(404).json(error, "Something is wrong");
     }
