@@ -28,16 +28,6 @@ router
       const { productId, quantity } = req.body;
 
       PostProduct(userId, productId, quantity, Wishlist, res);
-
-      // const { id } = req.body;
-
-      // await Product.findByIdAndUpdate(id, { wishlist: true });
-
-      // const newWishlistProduct = new Wishlist({ id: id });
-
-      // await newWishlistProduct.save();
-
-      // res.send({ succcess: "save to wishlsit" });
     } catch (error) {
       res.status(404).json(error, "Something is wrong");
     }
@@ -50,13 +40,6 @@ router
       const { productId } = req.body;
 
       DeleteProduct(userId, productId, Wishlist, res);
-
-      // const { wishlistProductId, productId } = req.body;
-
-      // await Product.findByIdAndUpdate(productId, { wishlist: false });
-      // await Wishlist.findByIdAndDelete(wishlistProductId);
-
-      // res.send({ succcess: "delete success" });
     } catch (error) {
       res.status(404).json(error, "Something is wrong");
     }

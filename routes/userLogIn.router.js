@@ -10,11 +10,10 @@ router
 
   .post(async (req, res) => {
     try {
-      console.log("aa gaya hoon");
       const { email, password } = req.body;
 
       const user = await userSignUp.find({ email }).exec();
-  
+
       if (user.length) {
         passwordAuthentication(
           password,

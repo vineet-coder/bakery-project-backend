@@ -16,9 +16,6 @@ router
     const { userId } = req.user;
     try {
       GetData(Cart, userId, res);
-
-      // const result = await Cart.find({ userId }).populate("id");
-      // res.send(result);
     } catch (error) {
       res.status(404).json(error, "Something is wrong");
     }
@@ -29,16 +26,7 @@ router
 
     try {
       const { productId, quantity } = req.body;
-      console.log(quantity);
       PostProduct(userId, productId, quantity, Cart, res);
-
-      // await Product.findByIdAndUpdate(id, { cart: true });
-
-      // const newCart = new Cart({ id: id, quantity: qnt });
-
-      // await newCart.save();
-
-      // res.send({ succcess: "ture" });
     } catch (error) {
       res.status(404).json(error, "Something is wrong");
     }
@@ -46,19 +34,11 @@ router
 
   .delete(async (req, res) => {
     const { userId } = req.user;
-    console.log(userId);
 
     try {
       const { productId } = req.body;
 
-      console.log(productId);
-
       DeleteProduct(userId, productId, Cart, res);
-
-      // await Product.findByIdAndUpdate(productId, { cart: false });
-      // await Cart.findByIdAndDelete(cartProductId);
-
-      // res.send({ succcess: "delete success" });
     } catch (error) {
       res.status(404).json(error, "Something is wrong");
     }
@@ -69,8 +49,6 @@ router.route("/products").post(async (req, res) => {
 
   try {
     const { product_Id, updatedQuantity } = req.body;
-    console.log("yaha Aa gaya hoon");
-    console.log({ product_Id, updatedQuantity });
 
     await Cart.updateOne(
       { "products._id": product_Id },
@@ -86,8 +64,6 @@ router.route("/products").post(async (req, res) => {
       model: "Product",
     });
     res.status(200).json({ success: true, message: "your data", result });
-
-    console.log("chal bhi raha huun");
   } catch (error) {
     console.log(error);
   }

@@ -12,8 +12,6 @@ async function initializeDbConnection() {
         useCreateIndex: true,
       }
     );
-
-    console.log("connecting");
   } catch (error) {
     console.error("mongoose connection failed...", error);
   }

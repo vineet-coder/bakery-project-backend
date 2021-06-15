@@ -28,7 +28,6 @@ router
 
 router.route("/brownies").get(async (req, res) => {
   try {
-    console.log("here");
     const result = await Product.find({ category: "brownie" });
 
     res.send(result);
@@ -47,7 +46,6 @@ router.route("/cookies").get(async (req, res) => {
 });
 router
   .param("productId", async (req, res, next, productId) => {
-    console.log("here");
 
     try {
       const product = await Product.findById(productId);
