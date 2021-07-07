@@ -56,7 +56,7 @@ router.route("/products").post(async (req, res) => {
       { $set: { "products.$.quantity": updatedQuantity } },
       (err) => {
         if (err) {
-          res.status(500).json({ error: "Unable to update competitor." });
+          res.status(500).json({ error: "Unable to update quantity." });
         }
       }
     );
